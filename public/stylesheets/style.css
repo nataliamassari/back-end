@@ -1,43 +1,56 @@
-
 a {
-  color: #00B7FF;
+  color: #00b7ff;
 }
 
 .backgroundcolor {
-  background-image: url('../images/backg.jpg');
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat
+  background-image: url("../images/backg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .header {
   width: 101% !important; /* Largura da div */
-  padding: 25px;
-  color: #FFF;
+  padding: 25px !important;
+  color: #fff;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
-  position: fixed; 
+  position: fixed;
   background-color: #000; /* Cor de fundo */
 }
 
-.loginbutton{
+.loginbutton {
+  margin-right: 30px;
+}
+
+.littleWarning {
+  font-size: 10px;
+  display: none;
+  color: red;
+}
+
+.backButton {
+  width: 100% !important;
+  color: #464646 !important;
   margin-right: 30px;
 }
 
 .vhsettings {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  padding-top: 100px !important;
 }
 
 .textpadding {
   padding: 30px;
+  text-align: center;
 }
 
 .title {
   font-family: "Roboto", sans-serif !important;
   font-weight: 500 !important;
   font-size: 30px;
-  color: #FFF;
+  color: #fff;
   padding-right: 0px;
   text-decoration: none;
 }
@@ -45,15 +58,29 @@ a {
 .buttonformatter {
   font-family: "Roboto", sans-serif !important;
   font-weight: 500 !important;
-  background-color: #236A6B !important;
-  border-color: #236A6B !important;
+  background-color: #236a6b !important;
+  border-color: #236a6b !important;
   padding-left: 30px !important;
   margin-top: 30px;
   padding-right: 30px !important;
 }
 
+.buttonIcon {
+  align-items: center !important;
+}
+
+.buttonCreatePage {
+  font-family: "Roboto", sans-serif !important;
+  font-weight: 500 !important;
+  width: 100% !important;
+  justify-content: center !important;
+  background-color: #236a6b !important;
+  border-color: #236a6b !important;
+  margin-top: 20px;
+}
+
 .cardstyle {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   padding-bottom: 3rem;
   padding-top: 2rem;
   padding-left: 1rem;
