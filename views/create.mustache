@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Futebol Elite</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+   
+<body class="backgroundcolor">
+ <header>
+        <div class="container-fluid header row justify-content-between">
+            <a class="col-3 title" href="/">FUTEBOL ELITE</a>
+            <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLoginRoute()">Entrar</button>
+        </div>
+    </header>
+    <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
+        <div class="col-3 cardstyle">
+            <h3 class="textpadding">CRIAR PÁGINA</h3>
+            <form>
+                <div class="mb-3">
+                    <label for="nameInput" class="form-label">Nome do Clube:</label>
+                    <input type="text" class="form-control" id="nameInput">
+                </div>
+                <div class="mb-3">
+                    <label for="urlInput" class="form-label">URL (Ex: sua-url):</label>
+                    <input type="text" class="form-control" id="urlInput">
+                </div>
+                <div class="mb-3">
+                    <label for="urlImgInput" class="form-label">URL Imagem:</label>
+                    <input type="text" class="form-control" id="urlImgInput">
+                </div>
+                <div class="mb-3">
+                    <label for="descriptionInput" class="form-label">Descrição:</label>
+                    <textarea class="form-control" id="descriptionInput" rows="3"></textarea>
+                </div>
+                <label for="classificationSelect" class="form-label">Classificação Brasileirão:</label>
+                <select class="form-select" id="classificationSelect" aria-label="Classificação Brasileirão">
+                    <option selected value="1">Série A</option>
+                    <option value="2">Série B</option>
+                    <option value="3">Série C</option>
+                    <option value="3">Série D</option>
+                </select>
+                <i id="warningMessage" class="littleWarning">Preencha todos os campos.</i>
+                <div id="json-output"></div>
+                <button type="button" class="btn btn-primary buttonCreatePage" id="sendData">Criar Página</button>
+                <button type="button" class="btn backButton" onclick="redirectToManageRoute()">Voltar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>   
+        function redirectToLoginRoute() {
+            window.location.href = '/login'
+        }
+
+        function redirectToCreateRoute() {
+            window.location.href = '/create'
+        }
+
+        function redirectToManageRoute() {
+            window.location.href = '/pageManager'
+        }
+
+        function redirectToMenuRoute() {
+            window.location.href = '/'
+        }
+
+        document.getElementById('sendData').addEventListener('click', function() {
+            const url = document.getElementById('urlInput').value;
+            const description = document.getElementById('descriptionInput').value;
+            const classification = document.getElementById('classificationSelect').value;
+            const name = document.getElementById('nameInput').value;
+            const img = document.getElementById('urlImgInput').value;
+
+            if (!url || !description || !name) {
+                document.getElementById('warningMessage').style.display = 'inline';
+                return
+            }
+
+            const jsonObject = {
+                url: url,
+                imgUrl: img,
+                description: description,
+                classification: classification,
+                name: name,
+            }
+            
+            fetch('http://localhost:3000/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonObject)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Aqui você pode adicionar qualquer lógica para lidar com a resposta de sucesso
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        // Aqui você pode adicionar qualquer lógica para lidar com erros
+    });
+
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
