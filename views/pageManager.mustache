@@ -15,7 +15,7 @@
  <header>
         <div class="container-fluid header row justify-content-between">
             <a class="col-3 title" href="/">FUTEBOL ELITE</a>
-            <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLoginRoute()">Entrar</button>
+            <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLogoutRoute()">Sair</button>
         </div>
     </header>
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
@@ -31,8 +31,8 @@
     </div>
 </body>
     <script>
-        function redirectToLoginRoute() {
-            window.location.href = '/login'
+        function redirectToLogoutRoute() {
+            window.location.href = '/logout'
         }
 
         function redirectToCreateRoute() {
