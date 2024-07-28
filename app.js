@@ -9,10 +9,14 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 var LocalStrategy = require("passport-local").Strategy;
 
+var dotenv = require('dotenv');
+
 var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+
+dotenv.config();
 
 var app = express();
 
