@@ -20,14 +20,18 @@
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
         <div class="col-3 cardstyle text-center">
             <h3 class="textpadding">ENTRAR</h3>
-            <form>
+            <form action="/login" method="POST">
                 <div class="mb-3">
+                    {{^usuario}}
                     <label for="exampleInputEmail1" class="form-label">Usuário</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input type="email" class="form-control" id="exampleInputEmail1" name="usuario" aria-describedby="emailHelp" autocomplete="off">
+                    {{/usuario}}
                 </div>
                 <div class="mb-3">
+                    {{^senha}}
                     <label for="exampleInputPassword1" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="senha" autocomplete="off">
+                    {{/senha}}
                 </div>
                 <button type="submit" class="btn btn-primary buttonformatter" href="/login">Entrar</button>
                 <button type="button" class="btn backButton" onclick="redirectToMenuRoute()">Voltar</button>
