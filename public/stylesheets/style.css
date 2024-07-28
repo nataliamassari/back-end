@@ -23,6 +23,11 @@ a {
   margin-right: 30px;
 }
 
+.logotipo {
+  width: 100px !important;
+  height: 80px !important;
+}
+
 .littleWarning {
   font-size: 10px;
   display: none;
@@ -49,10 +54,11 @@ a {
 .title {
   font-family: "Roboto", sans-serif !important;
   font-weight: 500 !important;
-  font-size: 30px;
+  font-size: 40px;
   color: #fff;
   padding-right: 0px;
   text-decoration: none;
+  margin-top: 30px !important;
 }
 
 .buttonformatter {

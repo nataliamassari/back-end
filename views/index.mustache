@@ -14,12 +14,24 @@
 <body class="backgroundcolor">
  <header>
         <div class="container-fluid header row justify-content-between">
-            <a class="col-3 title" href="/">FUTEBOL ELITE</a>
-            <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLoginRoute()">Entrar</button>
+        <div class="col-3" >
+         <img  class="col-1 logotipo" src="https://logomaker.designfreelogoonline.com/media/productdesigner/logo/resized/000903_Free_Futbol_Club_Logo_Maker-03.png" alt="Logotipo" class="img-fluid">
+            <a class="col-2 title" href="/">FUTEBOL ELITE</a>
+        </div>
+         <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLoginRoute()">Entrar</button>
         </div>
     </header>
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
-        <div class="col-3 cardstyle text-center">
+        <div class="col-7 row cardstyle justify-content-between">
+    {{#pages}}
+    <div class="card col-5" style="width: 15rem;">
+  <img src="{{imgUrl}}" class="card-img-top" alt="{{name}}">
+  <div class="card-body">
+    <h5 class="card-title">{{name}}</h5>
+    <a href="#" class="btn btn-primary buttonformatter">Visualizar</a>
+  </div>
+</div>
+    {{/pages}}
             <button type="submit" class="btn btn-primary buttonformatter" onclick="redirectToManageRoute()">Gerenciar páginas</button>
         </div>
     </div>

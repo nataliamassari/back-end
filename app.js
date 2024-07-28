@@ -4,7 +4,6 @@ var path = require("path");
 
 var cookieParser = require("cookie-parser");
 var session = require("express-session");
-var passport = require("passport");
 const fs = require('fs');
 const bodyParser = require('body-parser');
 var LocalStrategy = require("passport-local").Strategy;

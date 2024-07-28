@@ -14,8 +14,11 @@
 <body class="backgroundcolor">
  <header>
         <div class="container-fluid header row justify-content-between">
-            <a class="col-3 title" href="/">FUTEBOL ELITE</a>
-            <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLogoutRoute()">Sair</button>
+        <div class="col-3" >
+         <img  class="col-1 logotipo" src="https://logomaker.designfreelogoonline.com/media/productdesigner/logo/resized/000903_Free_Futbol_Club_Logo_Maker-03.png" alt="Logotipo" class="img-fluid">
+            <a class="col-2 title" href="/">FUTEBOL ELITE</a>
+        </div>
+         <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLoginRoute()">Entrar</button>
         </div>
     </header>
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
@@ -106,7 +109,7 @@
         console.error('Error:', error);
         // Aqui você pode adicionar qualquer lógica para lidar com erros
     });
-
+    redirectToMenuRoute();
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

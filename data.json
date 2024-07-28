@@ -1,16 +1,37 @@
 [
   {
-    "url": "bb",
-    "imgUrl": "cc",
-    "description": "dd",
+    "url": "flamengo",
+    "imgUrl": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/819.png",
+    "description": "O Clube de Regatas do Flamengo é uma agremiação poliesportiva brasileira com sede na cidade do Rio de Janeiro, capital do estado homônimo.",
     "classification": "1",
-    "name": "aa"
+    "name": "Flamengo"
   },
   {
-    "url": "bb",
-    "imgUrl": "cc",
-    "description": "dd",
+    "url": "sao-paulo-fc",
+    "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Brasao_do_Sao_Paulo_Futebol_Clube.svg/640px-Brasao_do_Sao_Paulo_Futebol_Clube.svg.png",
+    "description": "O São Paulo Futebol Clube, mais conhecido como São Paulo FC ou simplesmente São Paulo, é um clube poliesportivo brasileiro da cidade de São Paulo, capital do estado homônimo. Foi fundado em 25 de janeiro de 1930, tendo interrompido suas atividades em maio de 1935, e as retomado em dezembro do mesmo ano.",
+    "classification": "1",
+    "name": "São Paulo Futebol Clube"
+  },
+  {
+    "url": "londrina-ec",
+    "imgUrl": "https://adm.londrinaesporteclube.com.br//files2/Fotos_Temporada_2023/11_Novembro_2023/Londrina_Escudo.png",
+    "description": "O Londrina Esporte Clube é um clube de futebol localizado na cidade de Londrina, no norte do estado brasileiro do Paraná. É um dos principais clubes do estado, tendo sido fundado em 5 de abril de 1956.",
     "classification": "3",
-    "name": "aa"
+    "name": "Londrina Esporte Clube"
+  },
+  {
+    "url": "operario",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW3YcJZ4Y1tG7RhWRiigbUASMa6PnDzki4bw&s",
+    "description": "Operário Ferroviário Esporte Clube é uma agremiação esportiva da cidade de Ponta Grossa, no estado do Paraná, fundada no dia 1º de maio de 1912, sendo o segundo clube mais antigo do estado em atividade.",
+    "classification": "2",
+    "name": "Operário Ferroviário Esporte Clube"
+  },
+  {
+    "url": "teste",
+    "imgUrl": "teste",
+    "description": "teste",
+    "classification": "1",
+    "name": "teste"
   }
 ]

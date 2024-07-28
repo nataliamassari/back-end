@@ -1,6 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var lastRoute = 0;
+const fs = require('fs');
+const path = require('path');
+
 
 /*session authentication*/
 function isLogged (req, res, next) {
@@ -14,10 +17,16 @@ function isLogged (req, res, next) {
   return res.redirect("/login");
 };
 
-
 /* pages. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "main" });
+  try {
+    const dataPath = path.join(__dirname, '../data.json');
+    const pages = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+    res.render("index", { pages });
+  } catch (err) {
+    console.error('Error reading data.json:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 router.post('/login', function (req, res, next) {
