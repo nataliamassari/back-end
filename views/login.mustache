@@ -23,6 +23,9 @@
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
         <div class="col-3 cardstyle text-center">
             <h3 class="textpadding">ENTRAR</h3>
+             {{#error}}
+                <p style="color: red;">{{error}}</p>
+            {{/error}}
             <form action="/login" method="POST">
                 <div class="mb-3">
                     {{^usuario}}
