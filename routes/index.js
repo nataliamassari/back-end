@@ -7,6 +7,8 @@ const path = require('path');
 
 /*session authentication*/
 function isLogged (req, res, next) {
+  let error = req.body;
+
   if (req.session && req.session.user) {
     if (lastRoute == 0) {
       return res.render("create")
@@ -14,7 +16,9 @@ function isLogged (req, res, next) {
       return res.render("pageManager")
     }
   }
-  return res.redirect("/login");
+  if (error) {
+    return res.render("login", {error: "Usuário não autenticado!"});
+  }
 };
 
 /* pages. */
@@ -30,13 +34,13 @@ router.get("/", function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-  let {usuario, senha} = req.body;
+  let {usuario, senha, error} = req.body;
 
   if(usuario === process.env.ADMIN_USER && senha === process.env.ADMIN_PASS) {
     req.session.user = usuario;
     res.render("pageManager");
   } else {
-    res.render("login");
+    res.render("login", {error: "Usuário ou senha incorretos!"});
   };
 });
 
