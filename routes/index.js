@@ -33,6 +33,7 @@ router.get("/", function (req, res, next) {
   }
 });
 
+
 router.post('/login', function (req, res, next) {
   let {usuario, senha, error} = req.body;
 

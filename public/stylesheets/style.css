@@ -9,6 +9,9 @@ a {
   background-repeat: no-repeat;
 }
 
+.imgSize {
+  width: 280px;
+}
 .header {
   width: 101% !important; /* Largura da div */
   padding: 25px !important;
@@ -37,6 +40,8 @@ a {
 .backButton {
   width: 100% !important;
   color: #464646 !important;
+  border: 0px !important;
+  border-color: transparent !important;
   margin-right: 30px;
 }
 

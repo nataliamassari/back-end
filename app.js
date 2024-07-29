@@ -45,6 +45,34 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
+function getClassification(num) {
+  switch (num) {
+    case "1":
+      return "A";
+    case "2":
+      return "B";
+    case "3":
+      return "C";
+    case "4":
+      return "D";
+    default:
+      return "Desconhecido";
+  }
+}
+
+// crud
+app.get('/page/:id', (req, res) => {
+  const dataPath = path.join(__dirname, '/data.json');
+  const pages = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  const page = pages.find(p => p.url === req.params.id);
+  if (page) {
+    page.classificationText = getClassification(page.classification);
+    res.render("page", { page });
+  } else {
+    res.status(404).send('Página não encontrada');
+  }
+});
+
 app.post('/add', (req, res) => {
   const newItem = req.body;
 
