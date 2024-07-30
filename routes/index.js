@@ -1,25 +1,9 @@
 var express = require("express");
 var router = express.Router();
-var lastRoute = 0;
 const fs = require('fs');
 const path = require('path');
 
-
-/*session authentication*/
-function isLogged (req, res, next) {
-  let error = req.body;
-
-  if (req.session && req.session.user) {
-    if (lastRoute == 0) {
-      return res.render("create")
-    } else {
-      return res.render("pageManager")
-    }
-  }
-  if (error) {
-    return res.render("login", {error: "Usuário não autenticado!"});
-  }
-};
+const acesso = require("../helpers/auth")
 
 /* pages. */
 router.get("/", function (req, res, next) {
@@ -32,7 +16,6 @@ router.get("/", function (req, res, next) {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 router.post('/login', function (req, res, next) {
   let {usuario, senha, error} = req.body;
@@ -56,12 +39,12 @@ router.get('/logout', function (req, res, next) {
   res.redirect('/')
 })
 
-router.get("/create", isLogged, function (req, res, next) {
+router.get("/create", acesso.isLogged, function (req, res, next) {
   lastRoute = 0;
   res.render("create", { title: "create" });
 });
 
-router.get("/pageManager", isLogged, function (req, res, next) {
+router.get("/pageManager", acesso.isLogged, function (req, res, next) {
   res.render("pageManager", { title: "pageManager" });
 });
 
