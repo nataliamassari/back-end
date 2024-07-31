@@ -23,19 +23,57 @@
     </header>
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
         <div class="col-7 row cardstyle justify-content-between">
-    {{#pages}}
-    <div class="card col-5" style="width: 15rem;">
-  <img src="{{imgUrl}}" class="card-img-top" alt="{{name}}">
-  <div class="card-body">
-    <h5 class="card-title">{{name}}</h5>
-    <a href="/page/{{url}}" class="btn btn-primary buttonformatter">Visualizar</a>
-  </div>
-</div>
-    {{/pages}}
+        <div class="row">
+        <div class="col-5">
+          <select class="form-select" id="classificationSelect" aria-label="Classificação Brasileirão">
+                    <option selected value="1">Série A</option>
+                    <option value="2">Série B</option>
+                    <option value="3">Série C</option>
+                    <option value="3">Série D</option>
+                </select>
+        </div>
+        <div class="col-5">
+                <button type="button" class="btn" id="filter">Filtrar</button>
+                <button type="button" class="btn" id="removeFilter">Remover Filtro</button>
+        </div>
+                <br>
+                </div>
+       <div id="pagesContainer" class="row justify-content-between">
+            {{#pages}}
+            <div class="card col-5 page-card" data-classification="{{classification}}" style="width: 15rem;">
+                <img src="{{imgUrl}}" class="card-img-top" alt="{{name}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{name}}</h5>
+                    <a href="/page/{{url}}" class="btn btn-primary buttonformatter">Visualizar</a>
+                </div>
+            </div>
+            {{/pages}}
+        </div>
             <button type="submit" class="btn btn-primary buttonformatter" onclick="redirectToManageRoute()">Gerenciar páginas</button>
         </div>
     </div>
      <script>
+      document.getElementById('filter').addEventListener('click', function() {
+        const selectedClassification = document.getElementById('classificationSelect').value;
+        const cards = document.querySelectorAll('.page-card');
+
+        cards.forEach(card => {
+            const cardClassification = card.getAttribute('data-classification');
+            if (selectedClassification === "" || cardClassification === selectedClassification) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('removeFilter').addEventListener('click', function() {
+        const cards = document.querySelectorAll('.page-card');
+        cards.forEach(card => {
+            card.style.display = 'block';
+        });
+    });
+
         function redirectToLoginRoute() {
             window.location.href = '/login'
         }
