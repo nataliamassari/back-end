@@ -21,6 +21,7 @@ var app = express();
 
 // view engine setup
 var mustacheExpress = require("mustache-express");
+const { url } = require("inspector");
 var engine = mustacheExpress();
 app.engine("mustache", engine);
 app.set("views", path.join(__dirname, "views"));
@@ -62,7 +63,7 @@ function getClassification(num) {
 
 // crud
 app.get('/page/:id', (req, res) => {
-  const dataPath = path.join(__dirname, '/data.json');
+  const dataPath = path.join(__dirname, './data.json');
   const pages = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
   const page = pages.find(p => p.url === req.params.id);
   if (page) {
@@ -99,6 +100,51 @@ app.post('/add', (req, res) => {
           res.status(200).send('Item adicionado com sucesso');
       });
   });
+});
+
+app.post('/edit/:id', (req, res) => {
+  const { url, imgUrl, description, classification, name } = req.body;
+  const dataPath = path.join(__dirname, './data.json');
+
+  // Ler o arquivo JSON
+  fs.readFile(dataPath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Erro ao ler o arquivo', err);
+      return res.status(500).send('Erro ao ler o arquivo');
+    }
+
+    let pages = [];
+
+    if (data) {
+      pages = JSON.parse(data);
+    }
+
+    // Encontrar o índice da página a ser editada
+    const pageIndex = pages.findIndex(p => p.url === req.params.id);
+    if (pageIndex !== -1) {
+      // Atualizar a página
+      pages[pageIndex] = { ...pages[pageIndex], url, imgUrl, description, classification, name };
+
+      // Escrever as mudanças de volta ao arquivo JSON
+      fs.writeFile(dataPath, JSON.stringify(pages, null, 2), (err) => {
+        if (err) {
+          console.error('Erro ao escrever no arquivo', err);
+          return res.status(500).send('Erro ao escrever no arquivo');
+        }
+
+        // Redirecionar para a página editada com o novo URL
+        res.redirect(`/page/{{url}}`);
+      });
+    } else {
+      res.status(404).send('Página não encontrada');
+    }
+  });
+});
+
+
+// Middleware para erros 404
+app.use((req, res, next) => {
+  res.status(404).send('Not Found');
 });
 
 // catch 404 and forward to error handler
