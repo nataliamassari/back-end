@@ -80,6 +80,10 @@
             const name = document.getElementById('nameInput').value;
             const img = document.getElementById('urlImgInput').value;
 
+            //pegar a url 
+             const pathParts = window.location.pathname.split('/');
+             const slug = pathParts[pathParts.length - 1]; 
+
             if (!url || !description || !name) {
                 document.getElementById('warningMessage').style.display = 'inline';
                 return
@@ -92,24 +96,29 @@
                 classification: classification,
                 name: name,
             }
-            
-            fetch('http://localhost:3000/edit/:id', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonObject)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        // Aqui você pode adicionar qualquer lógica para lidar com a resposta de sucesso
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        // Aqui você pode adicionar qualquer lógica para lidar com erros
-    });
-    redirectToManageRoute();
+
+            fetch('http://localhost:3000/editPage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                url: slug,
+                newData: {
+                    url: url,
+                    imgUrl: img,
+                    description: description,
+                    classification: classification,
+                    name: name,
+                }
+            })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => {
+            console.error('Error:', error);
+            });
+    redirectToMenuRoute();
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

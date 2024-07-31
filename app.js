@@ -46,6 +46,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
+// funçao p/ retornar classificaçoes
 function getClassification(num) {
   switch (num) {
     case "1":
@@ -61,19 +62,9 @@ function getClassification(num) {
   }
 }
 
-// crud
-app.get('/page/:id', (req, res) => {
-  const dataPath = path.join(__dirname, './data.json');
-  const pages = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-  const page = pages.find(p => p.url === req.params.id);
-  if (page) {
-    page.classificationText = getClassification(page.classification);
-    res.render("page", { page });
-  } else {
-    res.status(404).send('Página não encontrada');
-  }
-});
+// CRUD
 
+//Create
 app.post('/add', (req, res) => {
   const newItem = req.body;
 
@@ -102,45 +93,91 @@ app.post('/add', (req, res) => {
   });
 });
 
-app.post('/edit/:id', (req, res) => {
-  const { url, imgUrl, description, classification, name } = req.body;
+// Read
+app.get('/page/:id', (req, res) => {
   const dataPath = path.join(__dirname, './data.json');
+  const pages = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  const page = pages.find(p => p.url === req.params.id);
+  if (page) {
+    page.classificationText = getClassification(page.classification);
+    res.render("page", { page });
+  } else {
+    res.status(404).send('Página não encontrada');
+  }
+});
 
-  // Ler o arquivo JSON
-  fs.readFile(dataPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Erro ao ler o arquivo', err);
-      return res.status(500).send('Erro ao ler o arquivo');
-    }
+// Update
+app.post('/editPage', (req, res) => {
+  const { url, newData } = req.body;
 
-    let pages = [];
+  fs.readFile('data.json', 'utf8', (err, data) => {
+      if (err) {
+          return res.status(500).send('Erro ao ler o arquivo');
+      }
 
-    if (data) {
-      pages = JSON.parse(data);
-    }
+      let array = [];
 
-    // Encontrar o índice da página a ser editada
-    const pageIndex = pages.findIndex(p => p.url === req.params.id);
-    if (pageIndex !== -1) {
-      // Atualizar a página
-      pages[pageIndex] = { ...pages[pageIndex], url, imgUrl, description, classification, name };
+      if (data) {
+          array = JSON.parse(data);
+      }
 
-      // Escrever as mudanças de volta ao arquivo JSON
-      fs.writeFile(dataPath, JSON.stringify(pages, null, 2), (err) => {
-        if (err) {
-          console.error('Erro ao escrever no arquivo', err);
-          return res.status(500).send('Erro ao escrever no arquivo');
-        }
+      const itemIndex = array.findIndex(item => item.url === url);
 
-        // Redirecionar para a página editada com o novo URL
-        res.redirect(`/page/{{url}}`);
+      if (itemIndex === -1) {
+          return res.status(404).send('Item não encontrado');
+      }
+
+      const updatedItem = { ...array[itemIndex], ...newData };
+
+      array[itemIndex] = updatedItem;
+
+      fs.writeFile('data.json', JSON.stringify(array, null, 2), (err) => {
+          if (err) {
+              return res.status(500).send('Erro ao escrever no arquivo');
+          }
+
+          res.status(200).send('Item editado com sucesso');
       });
-    } else {
-      res.status(404).send('Página não encontrada');
-    }
   });
 });
 
+// Remove
+app.delete('/delete/:url', (req, res) => {
+  const { url } = req.params;
+
+  fs.readFile('data.json', 'utf8', (err, data) => {
+      if (err) {
+          console.error('Erro ao ler o arquivo', err);
+          return res.status(500).send('Erro ao ler o arquivo');
+      }
+
+      let array = [];
+
+      if (data) {
+          array = JSON.parse(data);
+      }
+
+      // Encontrar o índice do item a ser removido
+      const itemIndex = array.findIndex(item => item.url === url);
+
+      if (itemIndex === -1) {
+          return res.status(404).send('Item não encontrado');
+      }
+
+      // Remover o item do array
+      array.splice(itemIndex, 1);
+
+      // Escrever o array atualizado de volta no arquivo JSON
+      fs.writeFile('data.json', JSON.stringify(array, null, 2), (err) => {
+          if (err) {
+              console.error('Erro ao escrever no arquivo', err);
+              return res.status(500).send('Erro ao escrever no arquivo');
+          }
+
+          res.status(200).send('Item excluído com sucesso');
+      });
+  });
+});
 
 // Middleware para erros 404
 app.use((req, res, next) => {

@@ -1,12 +1,5 @@
 [
   {
-    "url": "flamengo",
-    "imgUrl": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/819.png",
-    "description": "O Clube de Regatas do Flamengo é uma agremiação poliesportiva brasileira com sede na cidade do Rio de Janeiro, capital do estado homônimo.",
-    "classification": "1",
-    "name": "Flamengo"
-  },
-  {
     "url": "sao-paulo-fc",
     "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Brasao_do_Sao_Paulo_Futebol_Clube.svg/640px-Brasao_do_Sao_Paulo_Futebol_Clube.svg.png",
     "description": "O São Paulo Futebol Clube, mais conhecido como São Paulo FC ou simplesmente São Paulo, é um clube poliesportivo brasileiro da cidade de São Paulo, capital do estado homônimo. Foi fundado em 25 de janeiro de 1930, tendo interrompido suas atividades em maio de 1935, e as retomado em dezembro do mesmo ano.",
@@ -26,5 +19,12 @@
     "description": "Operário Ferroviário Esporte Clube é uma agremiação esportiva da cidade de Ponta Grossa, no estado do Paraná, fundada no dia 1º de maio de 1912, sendo o segundo clube mais antigo do estado em atividade.",
     "classification": "2",
     "name": "Operário Ferroviário Esporte Clube"
+  },
+  {
+    "url": "teste-edit",
+    "imgUrl": "teste-edit",
+    "description": "versao 1",
+    "classification": "1",
+    "name": "teste-edit"
   }
 ]

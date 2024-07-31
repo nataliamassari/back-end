@@ -101,14 +101,6 @@
         body: JSON.stringify(jsonObject)
     })
     .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        // Aqui você pode adicionar qualquer lógica para lidar com a resposta de sucesso
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        // Aqui você pode adicionar qualquer lógica para lidar com erros
-    });
     redirectToMenuRoute();
         });
     </script>

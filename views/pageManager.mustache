@@ -25,7 +25,7 @@
         <div class="col-3 cardstyle text-center row">
             <h1 style="display: flex; justify-content: center">{{title}}</h1>
             {{#pages}}
-                <p>{{url}}  <a href="/edit/{{url}}" onclick="redirectToCreateRoute()">Editar</a></p>
+                <p>{{url}}  <a href="/edit/{{url}}">Editar</a> <a class="delete-button" data-url="{{url}}">Excluir</a></p>
             {{/pages}}
             <button type="button" class="btn backButton" onclick="redirectToMenuRoute()">Voltar</button>
             <button type="submit" class="btn btn-primary buttonformatter" onclick="redirectToCreateRoute()">
@@ -38,6 +38,32 @@
     </div>
 </body>
     <script>
+    document.querySelectorAll('.delete-button').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const url = this.getAttribute('data-url'); 
+
+        if (confirm(`Tem certeza que deseja excluir o item com URL ${url}?`)) {
+            fetch(`http://localhost:3000/delete/${url}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Item excluído com sucesso!');
+                    window.location.reload();
+                } else {
+                    alert('Erro ao excluir o item.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao excluir o item.');
+            });
+        }
+        });
+    });
+
         function redirectToLogoutRoute() {
             window.location.href = '/logout'
         }
