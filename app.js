@@ -70,7 +70,6 @@ app.post('/add', (req, res) => {
 
   fs.readFile('data.json', 'utf8', (err, data) => {
       if (err) {
-          console.error('Erro ao ler o arquivo', err);
           return res.status(500).send('Erro ao ler o arquivo');
       }
 
@@ -84,7 +83,6 @@ app.post('/add', (req, res) => {
 
       fs.writeFile('data.json', JSON.stringify(array, null, 2), (err) => {
           if (err) {
-              console.error('Erro ao escrever no arquivo', err);
               return res.status(500).send('Erro ao escrever no arquivo');
           }
 
