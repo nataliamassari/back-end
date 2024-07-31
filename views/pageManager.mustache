@@ -23,13 +23,17 @@
     </header>
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
         <div class="col-3 cardstyle text-center row">
+            <h1 style="display: flex; justify-content: center">{{title}}</h1>
+            {{#pages}}
+                <p>{{url}}  <a href="/edit/{{url}}" onclick="redirectToCreateRoute()">Editar</a></p>
+            {{/pages}}
+            <button type="button" class="btn backButton" onclick="redirectToMenuRoute()">Voltar</button>
             <button type="submit" class="btn btn-primary buttonformatter" onclick="redirectToCreateRoute()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg buttonIcon" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                 </svg>
                 Criar Página
             </button>
-            <button type="button" class="btn backButton" onclick="redirectToMenuRoute()">Voltar</button>
         </div>
     </div>
 </body>
@@ -40,6 +44,10 @@
 
         function redirectToCreateRoute() {
             window.location.href = '/create'
+        }
+
+        function redirectToEditRoute() {
+            window.location.href = '/edit'
         }
 
         function redirectToManageRoute() {

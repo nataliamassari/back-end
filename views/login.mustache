@@ -36,10 +36,10 @@
                 <div class="mb-3">
                     {{^senha}}
                     <label for="exampleInputPassword1" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" name="senha" autocomplete="off">
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="senha" required autocomplete="off">
                     {{/senha}}
                 </div>
-                <button type="submit" class="btn btn-primary buttonformatter" href="/login">Entrar</button>
+                <button type="submit" class="btn btn-primary buttonformatter" href="/login" onclick="redirectToManageRoute()">Entrar</button>
                 <button type="button" class="btn backButton" onclick="redirectToMenuRoute()">Voltar</button>
             </form>
         </div>
