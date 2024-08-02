@@ -1,13 +1,13 @@
 module.exports = {
-/*session authentication*/
+  /*session authentication*/
 
   isLogged: function (req, res, next) {
     let error = req.body;
 
     if (req.session && req.session.user) {
-      return next()
+      return next();
     } else {
-      return res.render("login", {error: "Usuário não autenticado!"});
+      return res.render("login", { error: "Usuário não autenticado!" });
     }
-  }
-}
+  },
+};
