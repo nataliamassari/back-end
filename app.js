@@ -70,17 +70,15 @@ function getClassification(num) {
 app.post("/add", (req, res) => {
   const newItem = req.body;
 
-  // Validação dos dados de entrada
   const { error } = pageSchema.validate(newItem);
   if (error) {
-    // Extrai todas as mensagens de erro
     const errorMessages = error.details.map((detail) => detail.message);
     return res.status(400).json({ errors: errorMessages });
   }
 
   fs.readFile("data.json", "utf8", (err, data) => {
     if (err) {
-      return res.status(500).send("Erro ao ler o arquivo");
+      return res.status(500).json({ message: "Erro ao ler o arquivo" });
     }
 
     let array = [];
@@ -93,10 +91,10 @@ app.post("/add", (req, res) => {
 
     fs.writeFile("data.json", JSON.stringify(array, null, 2), (err) => {
       if (err) {
-        return res.status(500).send("Erro ao escrever no arquivo");
+        return res.status(500).json({ message: "Erro ao escrever no arquivo" });
       }
 
-      res.status(200).send("Item adicionado com sucesso");
+      res.status(200).json({ message: "Item adicionado com sucesso" });
     });
   });
 });
@@ -107,10 +105,10 @@ app.get("/page/:id", (req, res) => {
   const pages = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const page = pages.find((p) => p.url === req.params.id);
   if (page) {
-    page.classificationText = getClassification(page.classification);
-    res.render("page", { page });
+    page.classificationText = getClassification(page.classification)
+    res.render("page", { page })
   } else {
-    res.status(404).send("Página não encontrada");
+    res.status(404).send("Página não encontrada")
   }
 });
 
@@ -127,7 +125,7 @@ app.post("/editPage", (req, res) => {
 
   fs.readFile("data.json", "utf8", (err, data) => {
     if (err) {
-      return res.status(500).send("Erro ao ler o arquivo");
+      return res.status(500).json({ message: "Erro ao ler o arquivo" });
     }
 
     let array = [];
@@ -139,7 +137,7 @@ app.post("/editPage", (req, res) => {
     const itemIndex = array.findIndex((item) => item.url === url);
 
     if (itemIndex === -1) {
-      return res.status(404).send("Item não encontrado");
+      return res.status(404).json({ message: "Item não encontrado" });
     }
 
     const updatedItem = { ...array[itemIndex], ...newData };
@@ -148,10 +146,9 @@ app.post("/editPage", (req, res) => {
 
     fs.writeFile("data.json", JSON.stringify(array, null, 2), (err) => {
       if (err) {
-        return res.status(500).send("Erro ao escrever no arquivo");
+        return res.status(500).json({ message: "Erro ao escrever no arquivo" });
       }
-
-      res.status(200).send("Item editado com sucesso");
+      res.status(200).json({ message: "Item editado com sucesso" });
     });
   });
 });
@@ -172,17 +169,14 @@ app.delete("/delete/:url", (req, res) => {
       array = JSON.parse(data);
     }
 
-    // Encontrar o índice do item a ser removido
     const itemIndex = array.findIndex((item) => item.url === url);
 
     if (itemIndex === -1) {
       return res.status(404).send("Item não encontrado");
     }
 
-    // Remover o item do array
     array.splice(itemIndex, 1);
 
-    // Escrever o array atualizado de volta no arquivo JSON
     fs.writeFile("data.json", JSON.stringify(array, null, 2), (err) => {
       if (err) {
         console.error("Erro ao escrever no arquivo", err);

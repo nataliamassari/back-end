@@ -7,17 +7,10 @@
     "name": "São Paulo Futebol Clube"
   },
   {
-    "url": "londrina-ec",
+    "url": "londrina",
     "imgUrl": "https://adm.londrinaesporteclube.com.br//files2/Fotos_Temporada_2023/11_Novembro_2023/Londrina_Escudo.png",
     "description": "O Londrina Esporte Clube é um clube de futebol localizado na cidade de Londrina, no norte do estado brasileiro do Paraná. É um dos principais clubes do estado, tendo sido fundado em 5 de abril de 1956.",
     "classification": "3",
-    "name": "Londrina Esporte Clube"
-  },
-  {
-    "url": "operario",
-    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW3YcJZ4Y1tG7RhWRiigbUASMa6PnDzki4bw&s",
-    "description": "Operário Ferroviário Esporte Clube é uma agremiação esportiva da cidade de Ponta Grossa, no estado do Paraná, fundada no dia 1º de maio de 1912, sendo o segundo clube mais antigo do estado em atividade.",
-    "classification": "2",
-    "name": "Operário Ferroviário Esporte Clube"
+    "name": "Londrina"
   }
 ]

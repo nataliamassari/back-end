@@ -14,8 +14,8 @@
 <body class="backgroundcolor">
  <header>
         <div class="container-fluid header row justify-content-between">
-        <div class="col-3" >
-         <img  class="col-1 logotipo" src="https://logomaker.designfreelogoonline.com/media/productdesigner/logo/resized/000903_Free_Futbol_Club_Logo_Maker-03.png" alt="Logotipo" class="img-fluid">
+        <div class="col-3">
+         <img class="col-1 logotipo" src="https://logomaker.designfreelogoonline.com/media/productdesigner/logo/resized/000903_Free_Futbol_Club_Logo_Maker-03.png" alt="Logotipo" class="img-fluid">
             <a class="col-2 title" href="/">FUTEBOL ELITE</a>
         </div>
          <button type="button" class="btn btn-outline-light col-1 loginbutton" onclick="redirectToLogoutRoute()">Sair</button>
@@ -24,7 +24,7 @@
     <div class="container-fluid d-flex align-items-center justify-content-center vhsettings vh-100">
         <div class="col-3 cardstyle">
             <h3 class="textpadding">CRIAR PÁGINA</h3>
-            <form>
+            <form id="addItemForm">
                 <div class="mb-3">
                     <label for="nameInput" class="form-label">Nome do Clube:</label>
                     <input type="text" class="form-control" id="nameInput">
@@ -46,9 +46,10 @@
                     <option selected value="1">Série A</option>
                     <option value="2">Série B</option>
                     <option value="3">Série C</option>
-                    <option value="3">Série D</option>
+                    <option value="4">Série D</option>
                 </select>
                 <i id="warningMessage" class="littleWarning">Preencha todos os campos.</i>
+                <div id="errorMessage" class="littleWarning"></div>
                 <div id="json-output"></div>
                 <button type="button" class="btn btn-primary buttonCreatePage" id="sendData">Criar Página</button>
                 <button type="button" class="btn backButton" onclick="redirectToManageRoute()">Voltar</button>
@@ -56,34 +57,59 @@
         </div>
     </div>
 
-    <script>   
+    <script>
         function redirectToLogoutRoute() {
-            window.location.href = '/logout'
-        }
-
-        function redirectToCreateRoute() {
-            window.location.href = '/create'
+            window.location.href = '/logout';
         }
 
         function redirectToManageRoute() {
-            window.location.href = '/pageManager'
+            window.location.href = '/pageManager';
         }
 
         function redirectToMenuRoute() {
-            window.location.href = '/'
+            window.location.href = '/';
+        }
+
+        function clearErrors() {
+            document.getElementById('errorMessage').innerHTML = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function displayErrors(errors) {
+            const errorContainer = document.getElementById('errorMessage');
+            errorContainer.innerHTML = errors.join('<br>');
+            errorContainer.style.display = 'block';
+        }
+
+        function validateFormFields() {
+            const url = document.getElementById('urlInput').value;
+            const description = document.getElementById('descriptionInput').value;
+            const name = document.getElementById('nameInput').value;
+
+            const errors = [];
+            if (!url) errors.push('URL é obrigatória.');
+            if (!description) errors.push('Descrição é obrigatória.');
+            if (!name) errors.push('Nome é obrigatório.');
+
+            return errors;
         }
 
         document.getElementById('sendData').addEventListener('click', function() {
+            const localErrors = validateFormFields();
+            if (localErrors.length > 0) {
+                document.getElementById('warningMessage').style.display = 'inline';
+                displayErrors(localErrors);
+                return;
+            }
+
+            document.getElementById('warningMessage').style.display = 'none';
+            clearErrors();
+
             const url = document.getElementById('urlInput').value;
             const description = document.getElementById('descriptionInput').value;
             const classification = document.getElementById('classificationSelect').value;
             const name = document.getElementById('nameInput').value;
             const img = document.getElementById('urlImgInput').value;
-
-            if (!url || !description || !name) {
-                document.getElementById('warningMessage').style.display = 'inline';
-                return
-            }
 
             const jsonObject = {
                 url: url,
@@ -91,17 +117,28 @@
                 description: description,
                 classification: classification,
                 name: name,
-            }
-            
+            };
+
             fetch('http://localhost:3000/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonObject)
-    })
-    .then(response => response.json())
-    redirectToMenuRoute();
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonObject)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.errors) {
+                    displayErrors(data.errors);
+                } else {
+                    clearErrors();
+                    window.location.href = '/'; 
+                }
+            })
+            .catch(error => {
+                console.error('Erro na solicitação:', error);
+                displayErrors(['Ocorreu um erro ao processar a solicitação.']);
+            });
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -46,9 +46,10 @@
                     <option selected value="1">Série A</option>
                     <option value="2">Série B</option>
                     <option value="3">Série C</option>
-                    <option value="3">Série D</option>
+                    <option value="4">Série D</option>
                 </select>
                 <i id="warningMessage" class="littleWarning">Preencha todos os campos.</i>
+                <div id="errorMessage" class="littleWarning"></div>
                 <div id="json-output"></div>
                 <button type="button" class="btn btn-primary buttonEditPage" id="sendData">Editar Página</button>
                 <button type="button" class="btn backButton" onclick="redirectToManageRoute()">Voltar</button>
@@ -73,7 +74,41 @@
             window.location.href = '/'
         }
 
+        function clearErrors() {
+            document.getElementById('errorMessage').innerHTML = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function displayErrors(errors) {
+            const errorContainer = document.getElementById('errorMessage');
+            errorContainer.innerHTML = errors.join('<br>');
+            errorContainer.style.display = 'block';
+        }
+
+        function validateFormFields() {
+            const url = document.getElementById('urlInput').value;
+            const description = document.getElementById('descriptionInput').value;
+            const name = document.getElementById('nameInput').value;
+
+            const errors = [];
+            if (!url) errors.push('URL é obrigatória.');
+            if (!description) errors.push('Descrição é obrigatória.');
+            if (!name) errors.push('Nome é obrigatório.');
+
+            return errors;
+        }
+
         document.getElementById('sendData').addEventListener('click', function() {
+            const localErrors = validateFormFields();
+            if (localErrors.length > 0) {
+                document.getElementById('warningMessage').style.display = 'inline';
+                displayErrors(localErrors);
+                return;
+            }
+
+            document.getElementById('warningMessage').style.display = 'none';
+            clearErrors();
+
             const url = document.getElementById('urlInput').value;
             const description = document.getElementById('descriptionInput').value;
             const classification = document.getElementById('classificationSelect').value;
@@ -114,11 +149,18 @@
             })
             })
             .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => {
-            console.error('Error:', error);
+             .then(data => {
+                if (data.errors) {
+                    displayErrors(data.errors);
+                } else {
+                    clearErrors();
+                    window.location.href = '/'; 
+                }
+            })
+            .catch(error => {
+                console.error('Erro na solicitação:', error);
+                displayErrors(['Ocorreu um erro ao processar a solicitação.']);
             });
-    redirectToMenuRoute();
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
