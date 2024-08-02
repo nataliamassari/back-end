@@ -4,16 +4,18 @@ var path = require("path");
 
 var cookieParser = require("cookie-parser");
 var session = require("express-session");
-const fs = require('fs');
-const bodyParser = require('body-parser');
+const fs = require("fs");
+const bodyParser = require("body-parser");
 var LocalStrategy = require("passport-local").Strategy;
+var Joi = require("joi");
 
-var dotenv = require('dotenv');
+var dotenv = require("dotenv");
 
 var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var pageSchema = require("./helpers/valida");
 
 dotenv.config();
 
@@ -39,7 +41,7 @@ app.use(
     secret: "#@A4327Asdzw",
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -65,121 +67,136 @@ function getClassification(num) {
 // CRUD
 
 //Create
-app.post('/add', (req, res) => {
+app.post("/add", (req, res) => {
   const newItem = req.body;
 
-  fs.readFile('data.json', 'utf8', (err, data) => {
+  // Validação dos dados de entrada
+  const { error } = pageSchema.validate(newItem);
+  if (error) {
+    // Extrai todas as mensagens de erro
+    const errorMessages = error.details.map((detail) => detail.message);
+    return res.status(400).json({ errors: errorMessages });
+  }
+
+  fs.readFile("data.json", "utf8", (err, data) => {
+    if (err) {
+      return res.status(500).send("Erro ao ler o arquivo");
+    }
+
+    let array = [];
+
+    if (data) {
+      array = JSON.parse(data);
+    }
+
+    array.push(newItem);
+
+    fs.writeFile("data.json", JSON.stringify(array, null, 2), (err) => {
       if (err) {
-          return res.status(500).send('Erro ao ler o arquivo');
+        return res.status(500).send("Erro ao escrever no arquivo");
       }
 
-      let array = [];
-
-      if (data) {
-          array = JSON.parse(data);
-      }
-
-      array.push(newItem);
-
-      fs.writeFile('data.json', JSON.stringify(array, null, 2), (err) => {
-          if (err) {
-              return res.status(500).send('Erro ao escrever no arquivo');
-          }
-
-          res.status(200).send('Item adicionado com sucesso');
-      });
+      res.status(200).send("Item adicionado com sucesso");
+    });
   });
 });
 
 // Read
-app.get('/page/:id', (req, res) => {
-  const dataPath = path.join(__dirname, './data.json');
-  const pages = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-  const page = pages.find(p => p.url === req.params.id);
+app.get("/page/:id", (req, res) => {
+  const dataPath = path.join(__dirname, "./data.json");
+  const pages = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
+  const page = pages.find((p) => p.url === req.params.id);
   if (page) {
     page.classificationText = getClassification(page.classification);
     res.render("page", { page });
   } else {
-    res.status(404).send('Página não encontrada');
+    res.status(404).send("Página não encontrada");
   }
 });
 
 // Update
-app.post('/editPage', (req, res) => {
+app.post("/editPage", (req, res) => {
   const { url, newData } = req.body;
+  const { error, value } = pageSchema.validate(newData);
 
-  fs.readFile('data.json', 'utf8', (err, data) => {
+  if (error) {
+    // Extrai todas as mensagens de erro
+    const errorMessages = error.details.map((detail) => detail.message);
+    return res.status(400).json({ errors: errorMessages });
+  }
+
+  fs.readFile("data.json", "utf8", (err, data) => {
+    if (err) {
+      return res.status(500).send("Erro ao ler o arquivo");
+    }
+
+    let array = [];
+
+    if (data) {
+      array = JSON.parse(data);
+    }
+
+    const itemIndex = array.findIndex((item) => item.url === url);
+
+    if (itemIndex === -1) {
+      return res.status(404).send("Item não encontrado");
+    }
+
+    const updatedItem = { ...array[itemIndex], ...newData };
+
+    array[itemIndex] = updatedItem;
+
+    fs.writeFile("data.json", JSON.stringify(array, null, 2), (err) => {
       if (err) {
-          return res.status(500).send('Erro ao ler o arquivo');
+        return res.status(500).send("Erro ao escrever no arquivo");
       }
 
-      let array = [];
-
-      if (data) {
-          array = JSON.parse(data);
-      }
-
-      const itemIndex = array.findIndex(item => item.url === url);
-
-      if (itemIndex === -1) {
-          return res.status(404).send('Item não encontrado');
-      }
-
-      const updatedItem = { ...array[itemIndex], ...newData };
-
-      array[itemIndex] = updatedItem;
-
-      fs.writeFile('data.json', JSON.stringify(array, null, 2), (err) => {
-          if (err) {
-              return res.status(500).send('Erro ao escrever no arquivo');
-          }
-
-          res.status(200).send('Item editado com sucesso');
-      });
+      res.status(200).send("Item editado com sucesso");
+    });
   });
 });
 
 // Remove
-app.delete('/delete/:url', (req, res) => {
+app.delete("/delete/:url", (req, res) => {
   const { url } = req.params;
 
-  fs.readFile('data.json', 'utf8', (err, data) => {
+  fs.readFile("data.json", "utf8", (err, data) => {
+    if (err) {
+      console.error("Erro ao ler o arquivo", err);
+      return res.status(500).send("Erro ao ler o arquivo");
+    }
+
+    let array = [];
+
+    if (data) {
+      array = JSON.parse(data);
+    }
+
+    // Encontrar o índice do item a ser removido
+    const itemIndex = array.findIndex((item) => item.url === url);
+
+    if (itemIndex === -1) {
+      return res.status(404).send("Item não encontrado");
+    }
+
+    // Remover o item do array
+    array.splice(itemIndex, 1);
+
+    // Escrever o array atualizado de volta no arquivo JSON
+    fs.writeFile("data.json", JSON.stringify(array, null, 2), (err) => {
       if (err) {
-          console.error('Erro ao ler o arquivo', err);
-          return res.status(500).send('Erro ao ler o arquivo');
+        console.error("Erro ao escrever no arquivo", err);
+        return res.status(500).send("Erro ao escrever no arquivo");
       }
 
-      let array = [];
-
-      if (data) {
-          array = JSON.parse(data);
-      }
-
-      // Encontrar o índice do item a ser removido
-      const itemIndex = array.findIndex(item => item.url === url);
-
-      if (itemIndex === -1) {
-          return res.status(404).send('Item não encontrado');
-      }
-
-      // Remover o item do array
-      array.splice(itemIndex, 1);
-
-      // Escrever o array atualizado de volta no arquivo JSON
-      fs.writeFile('data.json', JSON.stringify(array, null, 2), (err) => {
-          if (err) {
-              console.error('Erro ao escrever no arquivo', err);
-              return res.status(500).send('Erro ao escrever no arquivo');
-          }
-
-          res.status(200).send('Item excluído com sucesso');
-      });
+      res.status(200).send("Item excluído com sucesso");
+    });
   });
 });
 
 // Middleware para erros 404
 app.use((req, res, next) => {
-  res.status(404).send('Not Found');
+  res.status(404).send("Not Found");
 });
 
 // catch 404 and forward to error handler
